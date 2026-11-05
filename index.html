@@ -4152,11 +4152,9 @@ var _estL8=estadisticas;estadisticas=function(){if(HIST.length)return _estL8.app
  '#fiov .fitabs button{flex:1 1 0;min-width:0;padding:4px 3px;font-size:13px;line-height:1.15;white-space:normal}',
  /* lista de vehículos: foto más grande, placa más chica, foto borrosa de fondo */
  '.vcard .plate.mini{max-width:84px}',
- '.vcard.vbg{position:relative;overflow:hidden;isolation:isolate}',
- '.vcard.vbg::before{content:"";position:absolute;inset:-24px;background:var(--vbg,none) center/cover no-repeat;filter:blur(10px) saturate(1.25);z-index:-2}',
- '.vcard.vbg::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.7);z-index:-1}',
- 'html[data-theme="dark"] .vcard.vbg::after{background:rgba(18,23,15,.72)}',
- '@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .vcard.vbg::after{background:rgba(18,23,15,.72)}}',
+ '.vcard.vbg{position:relative;overflow:hidden;isolation:isolate}.vcard.vbg::before{content:"";position:absolute;top:0;right:0;bottom:0;width:64%;background:var(--vbg,none) center/cover no-repeat;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.55) 45%,#000 100%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.55) 45%,#000 100%);opacity:.5;z-index:-1;pointer-events:none}',
+ 'html[data-theme="dark"] .vcard.vbg::before{opacity:.38}',
+ '@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .vcard.vbg::before{opacity:.38}}',
  /* la barra de abajo: si está escondida, se crea ya escondida (antes aparecía y se volvía a esconder) */
  'html.navhid nav.tabs{transform:translateY(calc(100% + 40px));opacity:0;pointer-events:none}',
  '@media (min-width:1000px){html:not(.as-phone).navhid nav.tabs{transform:none!important;opacity:1!important;pointer-events:auto!important}}',
@@ -4197,7 +4195,7 @@ function kmAprox(km,v){km=Math.round(num(km));if(km<=0)return km<-50?'Ya toca (s
 /* ---- Lista de vehículos: foto más grande y de fondo ---- */
 var _vbgC={};
 function vbgMini(v){if(!v||!v.foto)return null;var k=v.id+':'+v.foto.length;if(_vbgC[k]!==undefined)return _vbgC[k];_vbgC[k]=null;
- var im=new Image();im.onload=function(){try{var cv=document.createElement('canvas');cv.width=48;cv.height=30;var cx=cv.getContext('2d'),r=Math.max(48/im.width,30/im.height),w=im.width*r,h=im.height*r;cx.drawImage(im,(48-w)/2,(30-h)/2,w,h);_vbgC[k]=cv.toDataURL('image/jpeg',.8);vbgPon()}catch(e){_vbgC[k]=v.foto;vbgPon()}};im.src=v.foto;return null}
+ var im=new Image();im.onload=function(){try{var cv=document.createElement('canvas');var CW=420,CH=Math.round(420*im.height/im.width);cv.width=CW;cv.height=CH;var cx=cv.getContext('2d');try{cx.filter='blur(1.5px)'}catch(e){}cx.drawImage(im,0,0,CW,CH);_vbgC[k]=cv.toDataURL('image/jpeg',.8);vbgPon()}catch(e){_vbgC[k]=v.foto;vbgPon()}};im.src=v.foto;return null}
 function vbgPon(){Array.prototype.forEach.call(document.querySelectorAll('.vcard.vbg[data-id]'),function(el){var v=S.veh.filter(function(x){return x.id===+el.dataset.id})[0];var u=vbgMini(v);if(u)el.style.setProperty('--vbg','url('+u+')')})}
 var _vbL9=vehBasic;vehBasic=function(v){var h=_vbL9.apply(this,arguments);if(v&&v.foto)h=h.replace('<button class="vcard popin"','<button class="vcard popin vbg"').replace('width:104px;height:60px','width:124px;height:84px');return h};
 
